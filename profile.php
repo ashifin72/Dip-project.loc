@@ -49,6 +49,7 @@ if (Input::exiist()) {
       Session::flash('success', 'Данные изменены!');
 
       Redirect::to('profile.php?id=' . $id);
+      exit();
       $alert = 1;
     } else {
       $alert = 2;
@@ -79,7 +80,7 @@ if (Input::exiist()) {
       <? endif; ?>
 
       <h1>Профиль пользователя - <?= $user_profil->data()->username ?> </h1>
-      <? if ($user_profil->data()->id == $id || $user->hasPermissions('admin')): ?>
+      <? if ($user->data()->id == $id || $user->hasPermissions('admin')): ?>
         <ul>
           <li><a href="changepassword.php?id=<?= $id ?>">Изменить пароль</a></li>
         </ul>

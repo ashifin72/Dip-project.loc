@@ -49,6 +49,11 @@ if (!$user->hasPermissions('admin')){
 
     <div class="container">
       <div class="col-md-12">
+        <? if (Session::exists('success')): ?>
+          <div class="alert alert-success">
+            <? echo Session::flash('success', 'Данные изменены!');?>
+          </div>
+        <? endif; ?>
         <h1>Пользователи</h1>
         <table class="table">
           <thead>
