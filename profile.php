@@ -7,6 +7,7 @@ $user = new User();
 $validate_id = new Validate();
 $alert = '';
 if (!$_GET['id']) {
+  // если нет id  выбрасываем на главную
   Redirect::to('index.php');
 }
 $valid_id = $validate_id->check($_GET, [
@@ -22,40 +23,43 @@ if ($valid_id->passed()) {
   $user_profil = new User($id);
 
 } else {
-  $alert = 2;
+  // если валидация id не проходит выбрасываем на главную
+  Redirect::to('index.php');
 }
-
-$validate = new Validate();
-if (Input::exiist()) {
-  if (Token::check(Input::get('token'))) {
-    $validate->check($_POST, [
-        'username' => [
-            'required' => true,
-            'min' => 3,
-            'max' => 15,
-        ],
-        'status' => [
-            'required' => true,
-            'min' => 5,
-            'max' => 250,
-        ]
-    ]);
-    $alert = '';
-    if ($validate->passed()) {
-      Database::getInstance()->update('users', $id, [
-          'username' => Input::get('username'),
-          'status' => Input::get('status')
+if ($user->data()->id == $id){
+  $validate = new Validate();
+  if (Input::exiist()) {
+    if (Token::check(Input::get('token'))) {
+      $validate->check($_POST, [
+          'username' => [
+              'required' => true,
+              'min' => 3,
+              'max' => 15,
+          ],
+          'status' => [
+              'required' => true,
+              'min' => 5,
+              'max' => 250,
+          ]
       ]);
-      Session::flash('success', 'Данные изменены!');
+      $alert = '';
+      if ($validate->passed()) {
+        Database::getInstance()->update('users', $id, [
+            'username' => Input::get('username'),
+            'status' => Input::get('status')
+        ]);
+        Session::flash('success', 'Данные изменены!');
 
-      Redirect::to('profile.php?id=' . $id);
-      exit();
-      $alert = 1;
-    } else {
-      $alert = 2;
+        Redirect::to('profile.php?id=' . $id);
+        exit();
+        $alert = 1;
+      } else {
+        $alert = 2;
+      }
     }
   }
 }
+
 
 
 ?>
@@ -75,12 +79,12 @@ if (Input::exiist()) {
       <? endif; ?>
       <? if (Session::exists('success')): ?>
         <div class="alert alert-success">
-          <? echo Session::flash('success', 'Данные изменены!');?>
+          <? echo Session::flash('success', 'Данные изменены!'); ?>
         </div>
       <? endif; ?>
 
       <h1>Профиль пользователя - <?= $user_profil->data()->username ?> </h1>
-      <? if ($user->data()->id == $id || $user->hasPermissions('admin')): ?>
+
         <ul>
           <li><a href="changepassword.php?id=<?= $id ?>">Изменить пароль</a></li>
         </ul>
@@ -98,9 +102,6 @@ if (Input::exiist()) {
             <button type="submit" class="btn btn-warning">Обновить</button>
           </div>
         </form>
-      <? else: ?>
-        Просто данные профили
-      <? endif; ?>
 
 
     </div>

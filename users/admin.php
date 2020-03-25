@@ -81,7 +81,7 @@ if (!$user->hasPermissions('admin')){
               <? else:?>
                 <a href="status.php?id=<?= $user->id ?>" class="btn btn-danger">Разжаловать</a>
               <? endif;?>
-                <a href="/profile.php?id=<?= $user->id ?>" class="btn btn-info">Посмотреть</a>
+                <a href="/user_profile.php?id=<?= $user->id ?>" class="btn btn-info">Посмотреть</a>
                 <a href="edit.php?id=<?= $user->id ?>" class="btn btn-warning">Редактировать</a>
                 <a href="delete.php?id=<?= $user->id ?>" class="btn btn-danger" onclick="return confirm('Вы уверены?');">Удалить</a>
               </td>

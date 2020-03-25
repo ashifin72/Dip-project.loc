@@ -26,6 +26,7 @@ if (Input::exiist())
         ]
 
     ]);
+    // в данном случае я решил что выводить сообщения через перебор $alert  удобнее
     $alert = '';
     $consent = (Input::get('consent')) === 'on' ? true : false;
     if ($consent){
@@ -41,7 +42,7 @@ if (Input::exiist())
         Session::flash('success', 'Регистрация удачная');
       } else {
         $alert = 2;
-
+        $validation->errors();
       }
     }else{
       $alert = 2;
@@ -84,7 +85,8 @@ if (Input::exiist())
       <? elseif ($alert == 1):?>
 
         <div class="alert alert-success">
-          Вы зарегистрированы в системе!
+          Вы зарегистрированы в системе! <br>
+          <a href="index.php">перейти на главную</a>
         </div>
       <? else:?>
 

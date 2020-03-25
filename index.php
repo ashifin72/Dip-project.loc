@@ -40,7 +40,7 @@ $user = new User();
             ?>
             <tr>
               <td><?= $user->id ?></td>
-              <td><a href="profile.php?id=<?= $user->id ?>"><?= $user->username ?></a></td>
+              <td><a href="user_profile.php?id=<?= $user->id ?>"><?= $user->username ?></a></td>
               <td><?= $user->email ?></td>
               <td><?= $user->date_registr ?></td>
             </tr>

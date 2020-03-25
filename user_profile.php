@@ -1,45 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Profile</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-  
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">User Management</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<?php
+include_once 'init.php';
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Главная</a>
-          </li>
-        </ul>
+////ash_debug($users);
+$user = new User();
 
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a href="#" class="nav-link">Войти</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">Регистрация</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+$validate_id = new Validate();
+$alert = '';
+if (!$_GET['id']) {
+  Redirect::to('index.php');
+}
+$valid_id = $validate_id->check($_GET, [
+    'id' => [
+        'required' => true,
+        'min' => 1,
+        'int' => true,
+        'have' => 'users'
+    ],
+]);
+if ($valid_id->passed()) {
+  $id = $_GET['id'];
+  $user_profil = new User($id);
 
+} else {
+  Redirect::to('index.php');
+}
+
+?>
+<? include_once 'views/header.php' ?>
    <div class="container">
      <div class="row">
        <div class="col-md-12">
-         <h1>Данные пользователя</h1>
+         <h1>Данные пользователя <?= $user_profil->data()->username?></h1>
          <table class="table">
            <thead>
              <th>ID</th>
@@ -50,10 +41,10 @@
 
            <tbody>
              <tr>
-               <td>2</td>
-               <td>Джон</td>
-               <td>25/02/2025</td>
-               <td>Привет! Я новый пользователь вашего проекта, хочу перейти на уровень 3!</td>
+               <td><?= $user_profil->data()->id?></td>
+               <td><?= $user_profil->data()->username?></td>
+               <td><?= $user_profil->data()->date_registr?></td>
+               <td><?= $user_profil->data()->status?></td>
              </tr>
            </tbody>
          </table>
